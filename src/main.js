@@ -11,6 +11,8 @@ import firebase from 'firebase/app'
 import 'bootstrap/dist/css/bootstrap.css'
 import 'bootstrap-vue/dist/bootstrap-vue.css'
 import 'sweetalert2/dist/sweetalert2.min.css'
+Vue.prototype.$path = "http://localhost:8080"
+Vue.prototype.$axios = axios
 firebase.initializeApp({
     apiKey: "AIzaSyDivyvXgYoDQnLX8j02ErCs3upsm6OiFKY",
     authDomain: "action-gol.firebaseapp.com",

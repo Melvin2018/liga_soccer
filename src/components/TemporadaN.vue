@@ -30,7 +30,7 @@ export default {
     },
    methods: {
    onSubmit(){  
-    axios.post("http://192.168.43.17:8080/temporada/Add",this.temporada).then(response=>{
+   this.$axios.post(this.$path+"/temporada/Add",this.temporada).then(response=>{
       }).catch(e=>console.log(e));
     },
    }

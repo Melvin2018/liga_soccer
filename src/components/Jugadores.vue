@@ -31,7 +31,6 @@
   </b-modal>
 </template>
 <script>
-import axios from 'axios'
 export default {
 props:{
    idequipo:{
@@ -61,12 +60,12 @@ data(){
 		equipo:this.idequipo,
 	  }
   },
-	mounted(){
+created(){
 		this.getJug();
 	},
 	methods:{
 	  getJug(){
-			axios.get(`http://192.168.43.17:8080/carnet/jugadorDentro/${this.equipo}`).then(response=>{
+			this.$axios.get(this.$path+`/carnet/jugadorDentro/${this.equipo}`).then(response=>{
 				this.jugadores=response.data;
       		}).catch(e=>console.log(e));
 		},

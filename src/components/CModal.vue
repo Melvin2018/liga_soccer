@@ -24,7 +24,6 @@
   </b-modal>
 </template>
 <script>
-import axios from 'axios'
 import Swal from 'sweetalert2'
 export default {
   props:{
@@ -53,8 +52,8 @@ export default {
   methods: {
   async onSubmit(){
       var val='';
-      const URL = "http://192.168.43.17:8080/carnet/Add";
-      await axios.post(URL,this.entity).then(response=>{
+      const URL = this.$path+"/carnet/Add";
+      await this.$axios.post(URL,this.entity).then(response=>{
         val=response.data;
       }).catch(e=>console.log(e)); 
            if(val==''){
@@ -79,7 +78,7 @@ export default {
           } 
     },
     async getJugadores(){
-		await	axios.get(`http://192.168.43.17:8080/Jugador/jugadores/${this.entity.equipo}`).then(response=>{
+		await	this.$axios.get(this.$path+`/Jugador/jugadores/${this.entity.equipo}`).then(response=>{
 				this.jugadores=response.data;
       }).catch(e=>console.log(e));
     },

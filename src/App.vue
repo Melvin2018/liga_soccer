@@ -22,8 +22,7 @@
                 <b-dropdown-item href="/temporada">temporadas pasadas</b-dropdown-item>
             </b-nav-item-dropdown>
              <b-nav-item-dropdown text="Partidos" centered>
-                <b-dropdown-item href="#">Listado</b-dropdown-item>
-                <b-dropdown-item href="#">Agregar</b-dropdown-item>
+                <b-dropdown-item href="/partidos">Jornadas</b-dropdown-item>
             </b-nav-item-dropdown>
             </b-navbar-nav>
         </b-navbar>

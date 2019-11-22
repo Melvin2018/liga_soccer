@@ -79,22 +79,22 @@ export default {
          this.equipo.logo=url.toString();
         }
      }
-      await axios.put(`http://192.168.43.17:8080/equipo/Update`,this.equipo)
+      await this.$axios.put(this.$path+`/equipo/Update`,this.equipo)
       .catch(e=>console.log(e));
       this.$router.go();
     },
      getLugar(){
-			axios.get("http://192.168.43.17:8080/lugar/All").then(response=>{
+			this.$axios.get(this.$path+"/lugar/All").then(response=>{
 				this.lugares=response.data;
 			}).catch(e=>console.log(e));
     },
    async llenar(id){
-      await	axios.get(`http://192.168.43.17:8080/equipo/FindBy/${id}`).then(response=>{
+      await	this.$axios.get(this.$path+"/equipo/FindBy/${id}").then(response=>{
         this.equipo= response.data;
 			}).catch(e=>console.log(e));
     },
    },
-	mounted(){
+	created(){
 		this.getLugar();
 	} 
 }

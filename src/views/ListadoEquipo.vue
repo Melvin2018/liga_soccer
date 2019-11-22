@@ -31,7 +31,6 @@
     </div>
 </template>
 <script>
-import axios from 'axios'
 import Modal from '@/components/ModalE'
 import Modal1 from '@/components/ModalE1'
 import Swal from 'sweetalert2'
@@ -55,13 +54,13 @@ export default {
 		this.$root.$emit('bv::show::modal','modalEdit','#btnShow');
 		},
 		async getList(){
-		await axios.get("http://192.168.43.17:8080/equipo/All").then(response=>{
+		await this.$axios.get(this.$path+"/equipo/All").then(response=>{
 				this.equipos=response.data;
 			}).catch(e=>console.log(e));
 		},
 		eliminar(id){
-			const URL = `http://192.168.43.17:8080/equipo/Delete/${id}`
-			axios.delete(URL).then(x=> {
+			const URL = this.$path+`/equipo/Delete/${id}`
+			THIS.$axios.delete(URL).then(x=> {
 			this.getList();
 				if(x.data){
 					Swal.fire({

@@ -40,7 +40,6 @@
     </b-modal>
 </template>
 <script>
-import axios from 'axios'
 import firebase from 'firebase/app'
 import 'firebase/storage'
 export default {
@@ -69,18 +68,18 @@ export default {
         const url = await response.ref.getDownloadURL();
          this.equipo.logo = await url.toString();
       }
-     await axios.post("http://192.168.43.17:8080/equipo/Add",this.equipo)
+     await this.$axios.post(this.$path+"/equipo/Add",this.equipo)
        .catch(e=>console.log(e));
         this.$router.go();
     },
       getLugar(){
-			axios.get("http://192.168.43.17:8080/lugar/All").then(response=>{
+			this.$axios.get(this.$path+"/lugar/All").then(response=>{
         this.lugares=response.data;
         this.equipo.lugar=this.lugares[0];
 			}).catch(e=>console.log(e));
 	  	}
     },
-	mounted(){
+	created(){
 		this.getLugar();
 	} 
 }

@@ -23,7 +23,6 @@
     </b-modal>
 </template>
 <script>
-import axios from 'axios'
 export default {
  data() {
       return {  
@@ -38,22 +37,22 @@ export default {
     },
    methods: {
    onSubmit(){
-        const URL = "http://192.168.43.17:8080/equipoT/Add";
-         axios.post(URL,this.entity).then(response=>{
+        const URL = this.$path+"/equipoT/Add";
+         this.$axios.post(URL,this.entity).then(response=>{
           }).catch(e=>console.log(e));
     },
       getEquipos(){
-			axios.get("http://192.168.43.17:8080/equipoT/restantes").then(response=>{
+			this.$axios.get(this.$path+"/equipoT/restantes").then(response=>{
 				this.equipos=response.data;
 			}).catch(e=>console.log(e));
         },
       getPersonas(){
-			axios.get(`http://192.168.43.17:8080/Jugador/restantes/${this.entity.equipo}`).then(response=>{
+			this.$axios.get(this.$path+`/Jugador/restantes/${this.entity.equipo}`).then(response=>{
 				this.jugadores=response.data;
 			}).catch(e=>console.log(e));
 		}
     },
-	mounted(){
+	created(){
         this.getEquipos();
 	} 
 }

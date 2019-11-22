@@ -27,7 +27,6 @@
         </b-container>
 </template>
 <script>
-import axios from 'axios'
 import Temporada from '../components/TemporadaN'
 export default {
 components:{
@@ -45,14 +44,14 @@ data(){
 	},
 	methods:{
 		getList(){
-    const URL = "http://192.168.43.17:8080/temporada/antiguo"
-     axios.get(URL).then(response=>{
+    const URL = this.$path+"/temporada/antiguo"
+     this.$axios.get(URL).then(response=>{
 				this.temporadas=response.data;
 			}).catch(e=>console.log(e));
 		},
 	getval(){
-    const URL = "http://192.168.43.17:8080/temporada/val"
-    axios.get(URL).then(response=>{
+    const URL = this.$path+"/temporada/val"
+	this.$axios.get(URL).then(response=>{
 				this.nt=response.data;
 			}).catch(e=>console.log(e));
 		},

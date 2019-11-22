@@ -95,7 +95,6 @@
     </b-modal>
 </template>
 <script>
-import axios from 'axios'
 import firebase from 'firebase/app'
 import 'firebase/storage'
   export default {
@@ -104,7 +103,7 @@ import 'firebase/storage'
         imageData:null,
         jugador: {
           foto:'',
-          posicion:'',
+          posicion:'delantero',
           persona:{
           nombres:'',
             apellidos:'',
@@ -138,17 +137,17 @@ import 'firebase/storage'
         const url = await response.ref.getDownloadURL();
         this.jugador.foto =await url.toString();
       }
-     await axios.post("http://192.168.43.17:8080/Jugador/Add",this.jugador).catch(e=>console.log(e));
+     await this.$axios.post(this.$path+"/Jugador/Add",this.jugador).catch(e=>console.log(e));
       this.$router.go();
     },
       getLugar(){
-			axios.get("http://192.168.43.17:8080/lugar/All").then(response=>{
+			this.$axios.get(this.$path+"/lugar/All").then(response=>{
         this.lugares=response.data;
         this.jugador.persona.lugar=this.lugares[0];
 			}).catch(e=>console.log(e));
     }
     },
-	mounted(){
+	created(){
 		this.getLugar();
 	  }
   }

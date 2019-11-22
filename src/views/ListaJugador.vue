@@ -44,7 +44,6 @@
     </div>
 </template>
 <script>
-import axios from 'axios'
 import Modal from '@/components/ModalJ'
 import Modal1 from '@/components/ModalJ1'
 import Swal from 'sweetalert2'
@@ -56,12 +55,11 @@ export default {
 	data(){
 		return{
 		id:0,
-		size:0,
 		name:'',
 		jugadores:[]
 		};	
 	},
-	mounted(){
+	created(){
 		this.getJug();
 	},
 	 computed: {
@@ -69,10 +67,7 @@ export default {
 			return this.jugadores.filter((item) => 
 			item.persona.nombres.toUpperCase().includes(this.name.toUpperCase())
 			|item.persona.apellidos.toUpperCase().includes(this.name.toUpperCase()));
-		}, 
-		size: function(){
-			return this.jugadores.length;
-		}
+		},
 	},
 	methods:{
 	editar(id){
@@ -80,14 +75,14 @@ export default {
 		this.$root.$emit('bv::show::modal','modalEdit','#btnShow');
 	},
 	async getJug(){
-    const URL = "http://192.168.43.17:8080/Jugador/All"
-    await axios.get(URL).then(response=>{
+    const URL = this.$path+"/Jugador/All"
+    await this.$axios.get(URL).then(response=>{
 			this.jugadores=response.data;
 		}).catch(e=>console.log(e));
 	},
 	eliminar(id){
-		const URL = `http://192.168.43.17:8080/Jugador/Delete/${id}`
-			axios.delete(URL).then(x=> {
+		const URL = this.$path+`/Jugador/Delete/${id}`
+			this.$axios.delete(URL).then(x=> {
 				this.getJug();
 				var b=x.data;
 				if(b){

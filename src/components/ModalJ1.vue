@@ -88,7 +88,6 @@
     </b-modal>
 </template>
 <script>
-import axios from 'axios'
 import firebase from 'firebase/app'
 import 'firebase/storage'
   export default {
@@ -147,21 +146,21 @@ import 'firebase/storage'
         this.jugador.foto =await url.toString();
         }
       }
-      axios.put(`http://192.168.43.17:8080/Jugador/Update`,this.jugador).catch(e=>console.log(e));
+      this.$axios.put(this.$path+`/Jugador/Update`,this.jugador).catch(e=>console.log(e));
       this.$router.go();
     },
       getLugar(){
-			axios.get("http://192.168.43.17:8080/lugar/All").then(response=>{
+			this.$axios.get(this.$path+"/lugar/All").then(response=>{
 				this.lugares=response.data;
 			}).catch(e=>console.log(e));
     },
    async llenar(){
-      await	axios.get(`http://192.168.43.17:8080/Jugador/FindBy/${this.jugador.id}`).then(response=>{
+      await	thos.$axios.get(this.$path+`/Jugador/FindBy/${this.jugador.id}`).then(response=>{
         this.jugador=response.data;
 			}).catch(e=>console.log(e));
     },
     },
-	mounted(){
+	created(){
 		this.getLugar();
 	  }
   }

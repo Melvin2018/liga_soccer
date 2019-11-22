@@ -31,6 +31,12 @@ const routes = [{
         component: () =>
             import ( /* webpackChunkName: "et" */ '../views/EquipoTList.vue')
     },
+    {
+        path: '/partidos',
+        name: 'part',
+        component: () =>
+            import ('../views/Partidos.vue')
+    },
 ]
 const router = new VueRouter({
     mode: 'history',

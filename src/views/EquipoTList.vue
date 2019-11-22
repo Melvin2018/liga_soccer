@@ -2,7 +2,8 @@
 <b-container>
       <div class="card-deck">
               <b-button v-if="showa" v-b-modal.modal class="btn btn-dark">Agregar equipo</b-button>
-              <b-button v-if="showg"  class="btn btn-dark">Generar partidos</b-button>
+              <b-button v-if="showg" id="boton" :disabled="load"
+              class="btn btn-dark" @click="generar">Generar partidos</b-button>
     </div>
         <div class="row">
 				<table class="table table-inverse table-hover mt-5 table-bordered">
@@ -29,7 +30,11 @@
                         ref="btnShow1">Jugadores</b-button>
                       </td>	
 						         	<td><b-progress :max="18" :value="e.integrantes" show-value animated></b-progress></td>  
-                      <td><b-button @click="llenar(e.equipo.id)" ref="btnShow" :disabled="e.integrantes<18">Agregar Jugador</b-button></td>                 				        
+                      <td><b-button @click="llenar(e.equipo.id)"
+                      ref="btnShow"
+                      :disabled="e.integrantes==18"
+                      class="btn-outline-dark"
+                      id="boton1">Agregar Jugador</b-button></td>                 				        
 						</tr>
 					</tbody>
 				</table>
@@ -40,7 +45,6 @@
 </b-container>
 </template>
 <script>
-import axios from 'axios'
 import Modal from '@/components/CModal'
 import Modal1 from '@/components/ETModal'
 import Lista from '@/components/Jugadores'
@@ -66,6 +70,12 @@ export default {
     this.getshowg();
   },
     methods:{
+    async  generar(){
+      this.load=true;
+        const URL = this.$path+"/partido/Generar"
+       await this.$axios.get(URL).catch(e=>console.log(e));
+        this.$router.push('/partidos');
+      },
       llenar(ids){
         this.id=ids;
         this.$root.$emit('bv::show::modal','modal1','#btnShow');
@@ -76,14 +86,14 @@ export default {
         this.$root.$emit('bv::show::modal','modallistado','#btnShow1');
       },
 		getList(){
-    const URL = "http://192.168.43.17:8080/equipoT/dentro"
-    axios.get(URL).then(response=>{
+    const URL = this.$path+"/equipoT/dentro"
+    this.$axios.get(URL).then(response=>{
 				this.equipos=response.data;
 			    }).catch(e=>console.log(e));
         },
     getshowg(){
-    const URL = "http://192.168.43.17:8080/temporada/showg"
-    axios.get(URL).then(response=>{
+    const URL = this.$path+"/temporada/showg"
+    this.$axios.get(URL).then(response=>{
         this.showg=response.data;
         if(response.data==null){
           load=true;
@@ -91,8 +101,8 @@ export default {
 			}).catch(e=>console.log(e));
     },
 	getval(){
-    const URL = "http://192.168.43.17:8080/temporada/showa"
-     axios.get(URL).then(response=>{
+    const URL = this.$path+"/temporada/showa"
+     this.$axios.get(URL).then(response=>{
                 this.showa=response.data;
             }).catch(e=>console.log(e));
 		},
@@ -102,5 +112,8 @@ export default {
 <style>
 table{
 	background-color:darkgray;
+}
+#boton{
+  margin-left:10px;
 }
 </style>
