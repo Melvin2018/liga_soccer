@@ -155,7 +155,7 @@ import 'firebase/storage'
 			}).catch(e=>console.log(e));
     },
    async llenar(){
-      await	thos.$axios.get(this.$path+`/Jugador/FindBy/${this.jugador.id}`).then(response=>{
+      await	this.$axios.get(this.$path+`/Jugador/FindBy/${this.jugador.id}`).then(response=>{
         this.jugador=response.data;
 			}).catch(e=>console.log(e));
     },
