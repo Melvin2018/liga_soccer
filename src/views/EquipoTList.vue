@@ -1,14 +1,25 @@
 <template>
   <b-container>
-    <div class="card-deck">
-      <b-button v-if="showa" v-b-modal.modal class="btn btn-dark">Agregar equipo</b-button>
+    <div class="row">
+      <b-button v-if="showa" v-b-modal.modal class="btn btn-dark"
+        >Agregar equipo</b-button
+      >
       <b-button
         v-if="showg"
         id="boton"
         :disabled="load"
         class="btn btn-dark"
         @click="generar"
-      >Generar partidos</b-button>
+        >Generar partidos</b-button
+      >
+      <div class="d-flex justify-content-center mb-3">
+        <b-spinner
+        v-if="load"
+          style="width: 3rem; height: 3rem;"
+          variant="danger"
+          label="Loading..."
+        ></b-spinner>
+      </div>
     </div>
     <div class="row">
       <table class="table table-inverse table-hover mt-5 table-bordered">
@@ -26,7 +37,12 @@
         <tbody class="text-center border-dark">
           <tr v-for="e in equipos" :key="e.id">
             <td>
-              <img :src="e.equipo.equipo.logo" height="40px" width="60px" alt="foto" />
+              <img
+                :src="e.equipo.equipo.logo"
+                height="40px"
+                width="60px"
+                alt="foto"
+              />
             </td>
             <td>{{ e.equipo.equipo.nombre }}</td>
             <td>{{ e.equipo.equipo.lugar.nombre }}</td>
@@ -36,19 +52,26 @@
                 class="btn btn-info"
                 @click="llenar1(e.equipo.id, e.equipo.equipo.nombre)"
                 ref="btnShow1"
-              >Jugadores</b-button>
+                >Jugadores</b-button
+              >
             </td>
             <td>
-              <b-progress :max="18" :value="e.integrantes" show-value animated></b-progress>
+              <b-progress
+                :max="18"
+                :value="e.integrantes"
+                show-value
+                animated
+              ></b-progress>
             </td>
             <td>
               <b-button
                 @click="llenar(e.equipo.id)"
                 ref="btnShow"
-                :disabled="e.integrantes==18"
+                :disabled="e.integrantes == 18"
                 class="btn-outline-dark"
                 id="boton1"
-              >Agregar Jugador</b-button>
+                >Agregar Jugador</b-button
+              >
             </td>
           </tr>
         </tbody>

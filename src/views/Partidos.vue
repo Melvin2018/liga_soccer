@@ -2,20 +2,34 @@
   <b-container id="contenedor">
     <b-card no-body>
       <b-tabs pills card vertical>
-        <b-tab v-for="j in jornadas" :key="j.id" :title="'jornada '+j.numero">
-          <b-card align="center" v-for="p in j.partidoList" :key="p.id" class="container-fluid">
+        <b-tab v-for="j in jornadas" :key="j.id" :title="'jornada ' + j.numero">
+          <b-card
+            align="center"
+            v-for="p in j.partidoList"
+            :key="p.id"
+            class="container-fluid"
+          >
             <div class="row justify-content-start">
               <div class="col">
-                <img :src="p.equipo1.equipo.logo" alt="logo1" width="100px" height="100px" />
+                <img
+                  :src="p.equipo1.equipo.logo"
+                  alt="logo1"
+                  width="100px"
+                  height="100px"
+                />
                 <p>{{ p.equipo1.equipo.nombre }}</p>
               </div>
               <b-card-body title="Horario">
                 <b-card-text title="Dia">{{ p.horario.dia }}</b-card-text>
                 <b-card-text title="Hora">{{ p.horario.hora }}</b-card-text>
-                <b-button class="btn-info" @click="registrar()">Registrar resultado</b-button>
               </b-card-body>
               <div class="col">
-                <img :src="p.equipo2.equipo.logo" alt="logo1" width="100px" height="100px" />
+                <img
+                  :src="p.equipo2.equipo.logo"
+                  alt="logo1"
+                  width="100px"
+                  height="100px"
+                />
                 <p>{{ p.equipo2.equipo.nombre }}</p>
               </div>
             </div>
@@ -26,7 +40,6 @@
   </b-container>
 </template>
 <script>
-import Swal from "sweetalert2";
 export default {
   data() {
     return {
@@ -34,20 +47,6 @@ export default {
     };
   },
   methods: {
-    registrar() {
-      Swal.fire({
-        title: "¿El partido a ingresar está por jugarse?",
-        icon: "question",
-        showCancelButton: true,
-        confirmButtonColor: "#3085d6",
-        cancelButtonColor: "#d33",
-        
-      }).then(result => {
-        if (result.value) {
-          Swal.fire("Deleted!", "Your file has been deleted.", "success");
-        }
-      });
-    },
     async getJornadas() {
       await this.$axios
         .get(this.$path + "/jornada/All")
@@ -55,6 +54,9 @@ export default {
           this.jornadas = response.data;
         })
         .catch(e => console.log(e));
+    },
+    ir(){
+      this.$router.push("/partido");
     }
   },
   mounted() {

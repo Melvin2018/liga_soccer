@@ -5,37 +5,55 @@ const routes = [{
         path: '/',
         name: 'home',
         component: () =>
-            import ( /* webpackChunkName: "home" */ '../views/Home.vue')
+            import ('../views/Home.vue')
     },
     {
         path: '/jugador',
         name: 'listJ',
         component: () =>
-            import ( /* webpackChunkName: "lj" */ '../views/ListaJugador.vue')
+            import ('../views/ListaJugador.vue')
     },
     {
         path: '/equipo',
         name: 'listE',
         component: () =>
-            import ( /* webpackChunkName: "le" */ '../views/ListadoEquipo.vue')
+            import ('../views/ListadoEquipo.vue')
+    },
+    {
+        path: '/tabla',
+        name: 'tablag',
+        component: () =>
+            import ('../views/Tabla.vue')
     },
     {
         path: '/temporada',
         name: 'listT',
         component: () =>
-            import ( /* webpackChunkName: "te" */ '../views/Temporada.vue')
+            import ('../views/Temporada.vue')
     },
     {
         path: '/equipotemporada',
         name: 'listET',
         component: () =>
-            import ( /* webpackChunkName: "et" */ '../views/EquipoTList.vue')
+            import ('../views/EquipoTList.vue')
     },
     {
         path: '/partidos',
         name: 'part',
         component: () =>
             import ('../views/Partidos.vue')
+    },
+    {
+        path: '/partido',
+        name: 'partido',
+        component: () =>
+            import ('../views/Partido.vue')
+    },
+    {
+        path: '/jornada_actual',
+        name: 'jornActual',
+        component: () =>
+            import ('../views/Jornada.vue')
     },
 ]
 const router = new VueRouter({
