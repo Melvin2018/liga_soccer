@@ -8,9 +8,14 @@ import VueSweetalert2 from 'vue-sweetalert2'
 import InputMask from 'vue-input-mask'
 import VueAxios from 'vue-axios'
 import firebase from 'firebase/app'
+import Vuetify from 'vuetify'
 import 'bootstrap/dist/css/bootstrap.css'
 import 'bootstrap-vue/dist/bootstrap-vue.css'
 import 'sweetalert2/dist/sweetalert2.min.css'
+import vuetify from './plugins/vuetify';
+import '@babel/polyfill'
+import 'roboto-fontface/css/roboto/roboto-fontface.css'
+import '@mdi/font/css/materialdesignicons.css'
 Vue.prototype.$path = "http://localhost:8080"
 Vue.prototype.$axios = axios
 firebase.initializeApp({
@@ -26,10 +31,12 @@ firebase.initializeApp({
 Vue.use(VueSweetalert2);
 Vue.use(VueAxios, axios)
 Vue.use(BootstrapVue)
+Vue.use(Vuetify)
 Vue.component('input-mask', InputMask)
 Vue.config.productionTip = false;
 new Vue({
     router,
     store,
+    vuetify,
     render: h => h(App)
 }).$mount('#app');

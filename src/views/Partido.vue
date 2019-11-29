@@ -1,6 +1,6 @@
 <template>
   <b-container>
-    <div id="botons">
+    <div id="botons" class="">
       <b-button>Iniciar</b-button>
       <b-button>Medio tiempo</b-button>
       <b-button>Goles</b-button>
@@ -43,6 +43,7 @@
           <b-card no-body align="center">
             <b-card-body>
               <div>
+                <v-icon>home</v-icon>
                 inicio de partido
               </div>
             </b-card-body>
@@ -63,7 +64,7 @@
 <script>
 export default {
   data() {
-    return { p: null };
+    return { p:{} };
   },
   methods: {
     async getJornada() {
