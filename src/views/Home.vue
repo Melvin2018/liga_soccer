@@ -3,67 +3,76 @@
     <b-carousel
       id="carousel-1"
       v-model="slide"
-      :interval="4000"
+      :interval="3000"
       controls
       indicators
-      background="#ababab"
-      img-width="1024"
-      img-height="480"
+      img-width="900"
+      img-height="250"
       style="text-shadow: 1px 1px 2px #333;"
       @sliding-start="onSlideStart"
       @sliding-end="onSlideEnd"
     >
-      <b-carousel-slide
-        caption="First slide"
-        text="Nulla vitae elit libero, a pharetra augue mollis interdum."
-        img-src="https://picsum.photos/1024/480/?image=52"
-      ></b-carousel-slide>
-      <b-carousel-slide img-src="https://picsum.photos/1024/480/?image=54">
-        <h1>Hello world!</h1>
-      </b-carousel-slide>
-      <b-carousel-slide img-src="https://images.fineartamerica.com/images-medium-large-5/football-championship-background-lawkeeper.jpg">
-        <h1>Hello world2!</h1>
-      </b-carousel-slide>
-      <b-carousel-slide img-src="https://picsum.photos/1024/480/?image=58"></b-carousel-slide>
-    <b-carousel-slide>
-        <template v-slot:img>
-          <img
-            class="d-block img-fluid w-100"
-            width="1024"
-            height="480"
-            src="https://picsum.photos/1024/480/?image=55"
-            alt="image slot"
-          >
-        </template>
-      </b-carousel-slide>
-      <b-carousel-slide caption="Blank Image" img-blank img-alt="Blank image">
-        <p>
-          Lorem ipsum dolor sit amet, consectetur adipiscing elit. Suspendisse eros felis, tincidunt
-          a tincidunt eget, convallis vel est. Ut pellentesque ut lacus vel interdum.
-        </p>
+      <b-carousel-slide v-for="p in partidos" :key="p.id"
+        img-blank
+          background="black"  
+      >
+       <b-card bg-variant="dark">
+        <div class="row justify-content-start">
+          <div class="col">
+            <img
+              :src="p.equipo1.equipo.logo"
+              alt="logo1"
+              width="100px"
+              height="100px"
+            />
+            <p>{{ p.equipo1.equipo.nombre }}</p>
+          </div>
+          <b-card-body title="Horario">
+            <b-card-text title="Dia">{{ p.horario.dia }}</b-card-text>
+            <b-card-text title="Hora">{{ p.horario.hora }}</b-card-text>
+          </b-card-body>
+          <div class="col">
+            <img
+              :src="p.equipo2.equipo.logo"
+              alt="logo1"
+              width="100px"
+              height="100px"
+            />
+            <p>{{ p.equipo2.equipo.nombre }}</p>
+          </div>
+        </div>
+      </b-card>
       </b-carousel-slide>
     </b-carousel>
-    <p class="mt-4">
-      Slide #: {{ slide }}<br>
-      Sliding: {{ sliding }}
-    </p>
   </div>
 </template>
 <script>
-  export default {
-    data() {
-      return {
-        slide: 0,
-        sliding: null
-      }
+export default {
+  data() {
+    return {
+      slide: 0,
+      sliding: null,
+      partidos:[]
+    };
+  },
+  methods: {
+    onSlideStart(slide) {
+      this.sliding = true;
     },
-    methods: {
-      onSlideStart(slide) {
-        this.sliding = true
-      },
-      onSlideEnd(slide) {
-        this.sliding = false
-      }
+    onSlideEnd(slide) {
+      this.sliding = false;
+    },
+    async getJornada() {
+      await this.$axios
+        .get(this.$path + "/jornada/Last")
+        .then(response => {
+          this.partidos = response.data;
+        })
+        .catch(e => console.log(e));
     }
-  };
+  },
+  mounted() {
+    this.getJornada();
+  }
+};
 </script>

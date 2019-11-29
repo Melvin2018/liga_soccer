@@ -42,7 +42,7 @@
 </template>
 <style>
 body {
-  background-image: url(https://firebasestorage.googleapis.com/v0/b/action-gol.appspot.com/o/Banner.jpg?alt=media&token=3816b759-468c-4b16-ba41-f652a3cee89c);
+  background-image: url(./assets/Banner.jpg);
   background-size: cover;
 }
 #cont {
