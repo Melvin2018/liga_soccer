@@ -5,7 +5,10 @@
         <b-navbar type="dark" variant="dark" id="cont">
           <b-navbar-nav>
             <b-nav-item href="/"
-              ><img src="./assets/img/AG.png" height="40px" width="40px"
+              ><img
+                src="https://firebasestorage.googleapis.com/v0/b/action-gol.appspot.com/o/AG.png?alt=media&token=3bf14d2a-e16f-487e-b074-105eb81899a4"
+                height="40px"
+                width="40px"
             /></b-nav-item>
             <b-nav-item href="/jugador">Jugadores</b-nav-item>
             <b-nav-item href="/equipo">Equipos</b-nav-item>
@@ -25,7 +28,9 @@
             </b-nav-item-dropdown>
             <b-nav-item-dropdown text="Jornadas" centered>
               <b-dropdown-item href="/partidos">Jornadas</b-dropdown-item>
-              <b-dropdown-item href="/jornada_actual">Jornada actual</b-dropdown-item>
+              <b-dropdown-item href="/jornada_actual"
+                >Jornada actual</b-dropdown-item
+              >
             </b-nav-item-dropdown>
           </b-navbar-nav>
         </b-navbar>
@@ -37,7 +42,7 @@
 </template>
 <style>
 body {
-  background-image: url(./assets/img/Banner.jpg);
+  background-image: url(https://firebasestorage.googleapis.com/v0/b/action-gol.appspot.com/o/Banner.jpg?alt=media&token=3816b759-468c-4b16-ba41-f652a3cee89c);
   background-size: cover;
 }
 #cont {
