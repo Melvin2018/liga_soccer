@@ -1,5 +1,6 @@
 import Vue from 'vue'
 import VueRouter from 'vue-router'
+import partido from '../views/Partido.vue'
 Vue.use(VueRouter)
 const routes = [{
         path: '/',
@@ -44,10 +45,9 @@ const routes = [{
             import ('../views/Partidos.vue')
     },
     {
-        path: '/partido',
+        path: '/partido/:id',
         name: 'partido',
-        component: () =>
-            import ('../views/Partido.vue')
+        component: partido,
     },
     {
         path: '/jornada_actual',

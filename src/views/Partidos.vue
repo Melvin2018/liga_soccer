@@ -1,5 +1,5 @@
 <template>
-  <b-container id="contenedor">
+<b-container>
     <b-card no-body>
       <b-tabs pills card vertical>
         <b-tab v-for="j in jornadas" :key="j.id" :title="'jornada ' + j.numero">
@@ -64,10 +64,3 @@ export default {
   }
 };
 </script>
-
-<style>
-#contenedor {
-  width: 60%;
-  margin-left: 20%;
-}
-</style>

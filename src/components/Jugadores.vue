@@ -14,7 +14,7 @@
 	                </thead>
 					<tbody class="bg-aqua text-center">
 						<tr v-for="j in jugadores" :key="j.id">
-							<td><img :src="j.foto" height="30px" width="40px" alt="foto"></td>
+							<td><img :src="j.jugador.foto" height="30px" width="40px" alt="foto"></td>
 				        	<td>{{ j.jugador.persona.nombres+' '+j.jugador.persona.apellidos }}</td>			
 				            <td>{{ j.jugador.persona.edad }}</td>	
 							<td>{{ j.jugador.posicion }}</td>	

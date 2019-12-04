@@ -4,22 +4,16 @@
       <b-button v-if="showa" v-b-modal.modal class="btn btn-dark"
         >Agregar equipo</b-button
       >
-      <b-button
+      <v-button
         v-if="showg"
         id="boton"
         :disabled="load"
-        class="btn btn-dark"
-        @click="generar"
-        >Generar partidos</b-button
+       :loading="load"
+        class="white--text"
+        color="purple darken-2"
+        @click="load"
+        >Generar partidos</v-button
       >
-      <div class="d-flex justify-content-center mb-3">
-        <b-spinner
-        v-if="load"
-          style="width: 3rem; height: 3rem;"
-          variant="danger"
-          label="Loading..."
-        ></b-spinner>
-      </div>
     </div>
     <div class="row">
       <table class="table table-inverse table-hover mt-5 table-bordered">
@@ -80,6 +74,26 @@
     <Modal :idequipo="id"></Modal>
     <Modal1></Modal1>
     <Lista :idequipo="id" :title="nombre"></Lista>
+     <v-dialog
+      v-model="load"
+      hide-overlay
+      persistent
+      width="300"
+    >
+      <v-card
+        color="primary"
+        dark
+      >
+        <v-card-text>
+          Espere mientras carga
+          <v-progress-linear
+            indeterminate
+            color="white"
+            class="mb-0"
+          ></v-progress-linear>
+        </v-card-text>
+      </v-card>
+    </v-dialog>
   </b-container>
 </template>
 <script>
@@ -102,6 +116,12 @@ export default {
       equipos: []
     };
   },
+watch: {
+      load (val) {
+        if (!val) return
+        setTimeout(() => (this.load = false), 30000)
+      },
+    },
   mounted() {
     this.getList();
     this.getval();
