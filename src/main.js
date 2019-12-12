@@ -5,10 +5,11 @@ import store from './store'
 import BootstrapVue from 'bootstrap-vue'
 import axios from 'axios'
 import VueSweetalert2 from 'vue-sweetalert2'
-import InputMask from 'vue-input-mask'
 import VueAxios from 'vue-axios'
 import firebase from 'firebase/app'
 import vuetify from './plugins/vuetify'
+import moment from "moment"
+import VueMomentJS from "vue-momentjs"
 import 'bootstrap/dist/css/bootstrap.css'
 import 'bootstrap-vue/dist/bootstrap-vue.css'
 import 'sweetalert2/dist/sweetalert2.min.css'
@@ -27,11 +28,11 @@ firebase.initializeApp({
     appId: "1:253574338725:web:883d607e79a6bb3263554c",
     measurementId: "G-ES21S4TLB7"
 });
-Vue.use(VueSweetalert2);
+Vue.use(VueMomentJS, moment)
+Vue.use(VueSweetalert2)
 Vue.use(VueAxios, axios)
 Vue.use(BootstrapVue)
 Vue.use(vuetify)
-Vue.component('input-mask', InputMask)
 Vue.config.productionTip = false;
 new Vue({
     router,

@@ -1,102 +1,155 @@
 <template>
-  <b-modal
-    id="modalCambio"
-    ref="modalCambio"
-    title="Ingresando cambio"
-    hide-footer
-  >
-    <div class="container" fluid v-if="cambio != null">
-      <form @submit.prevent="onSubmit">
-        <b-form-group label="equipo del jugador">
-          <b-form-radio-group v-model="equipo">
-            <b-form-radio :value="cambio.partido.equipo1">{{
-              cambio.partido.equipo1.equipo.nombre
-            }}</b-form-radio>
-            <b-form-radio :value="cambio.partido.equipo2">{{
-              cambio.partido.equipo2.equipo.nombre
-            }}</b-form-radio>
-          </b-form-radio-group>
-        </b-form-group>
-        <b-form-group id="input-group-1" label="razon:" label-for="input-1">
-          <b-form-select id="input-1" v-model="cambio.razon" required>
-            <option v-for="e in razones" :key="e" :value="e">
-              {{ e }}
-            </option>
-          </b-form-select>
-        </b-form-group>
-        <v-row align="center" justify="center">
-          <b-form-group
-            id="input-group-2"
-            label="saliente:"
-            label-for="input-2"
-            class="group-input"
-          >
-            <b-form-radio-group v-model="cambio.saliente">
-              <b-form-radio
-                v-for="j in jugadores"
-                :key="j.id"
-                :value="j"
-                style="width: 40%"
+  <v-container v-if="equipo != null">
+    <v-card>
+      <v-card-title>
+        <span class="headline">Ingresando cambio</span>
+      </v-card-title>
+      <v-card-text>
+        <v-container>
+          <v-row align="center" justify="center" no-gutters>
+            <v-col cols="12" sm="6" md="8">
+              <v-radio-group v-model="equipo" label="Equipo">
+                <v-row>
+                  <v-radio
+                    :label="cambio.partido.equipo1.equipo.nombre"
+                    :value="cambio.partido.equipo1"
+                  ></v-radio>
+                  <img
+                    :src="cambio.partido.equipo1.equipo.logo"
+                    height="20px"
+                    width="20px"
+                  />
+                </v-row>
+                <v-row>
+                  <v-radio
+                    :label="cambio.partido.equipo2.equipo.nombre"
+                    :value="cambio.partido.equipo2"
+                  ></v-radio>
+                  <img
+                    :src="cambio.partido.equipo2.equipo.logo"
+                    height="20px"
+                    width="20px"
+                  />
+                </v-row>
+              </v-radio-group>
+            </v-col>
+            <v-col class="d-flex" cols="12" sm="6" md="8">
+              <v-select
+                v-model="cambio.razon"
+                required
+                :items="razones"
+                label="Razon"
+                dense
+                outlined
               >
-                {{ j.jugador.persona.nombres }}
-              </b-form-radio>
-            </b-form-radio-group>
-          </b-form-group>
-          <b-form-group
-            id="input-group-3"
-            label="entrante:"
-            label-for="input-3"
-            class="group-input"
-          >
-            <b-form-radio-group v-model="cambio.entrante">
-              <b-form-radio
-                v-for="j in jugadores"
-                :key="j.id"
-                :value="j"
-                style="width: 41%"
-              >
-                {{ j.jugador.persona.nombres }}
-              </b-form-radio>
-            </b-form-radio-group>
-          </b-form-group>
-        </v-row>
-        <b-button-group>
-        <b-button type="submit" variant="primary">Submit</b-button>
-        <b-button type="reset" variant="danger">Reset</b-button>
-        </b-button-group>
-      </form>
-    </div>
-  </b-modal>
+              </v-select>
+            </v-col>
+            <v-col class="d-flex" cols="12" sm="6" md="8">
+              <v-card>
+                <v-card-title>
+                  Cambio
+                </v-card-title>
+                <v-card-text>
+                  <v-row>
+                    <v-col class="d-flex" cols="12" sm="6" md="6">
+                      <v-select
+                        v-model="cambio.entrante"
+                        required
+                        :items="lista1"
+                        label="entrante"
+                        dense
+                        outlined
+                      >
+                        <template slot="selection" slot-scope="data">
+                          <v-chip class="v-chip--selected">
+                            <v-avatar>
+                              <img :src="data.item.jugador.foto" />
+                            </v-avatar>
+                            {{ data.item.jugador.persona.nombres }}
+                          </v-chip>
+                        </template>
+                        <template slot="item" slot-scope="data">
+                          <v-avatar>
+                            <img :src="data.item.jugador.foto" />
+                          </v-avatar>
+                          {{ data.item.jugador.persona.nombres }}
+                          {{ data.item.jugador.persona.apellidos }}
+                        </template>
+                      </v-select>
+                    </v-col>
+                    <v-col class="d-flex" cols="12" sm="6" md="6">
+                      <v-select
+                        v-model="cambio.saliente"
+                        required
+                        :items="lista2"
+                        label="saliente"
+                        dense
+                        outlined
+                      >
+                        <template slot="selection" slot-scope="data">
+                          <v-chip class="v-chip--selected">
+                            <v-avatar>
+                              <img :src="data.item.jugador.foto" />
+                            </v-avatar>
+                            {{ data.item.jugador.persona.nombres }}
+                          </v-chip>
+                        </template>
+                        <template slot="item" slot-scope="data">
+                          <v-avatar>
+                            <img :src="data.item.jugador.foto" />
+                          </v-avatar>
+                          {{ data.item.jugador.persona.nombres }}
+                          {{ data.item.jugador.persona.apellidos }}
+                        </template>
+                      </v-select>
+                    </v-col>
+                  </v-row>
+                </v-card-text>
+              </v-card>
+            </v-col>
+          </v-row>
+        </v-container>
+      </v-card-text>
+      <v-card-actions>
+        <v-spacer></v-spacer>
+        <v-btn color="blue darken-1" @click="salir">Cancelar</v-btn>
+        <v-btn color="blue darken-1" @click="onSubmit" :loading="load"
+          >Guardar</v-btn
+        >
+      </v-card-actions>
+    </v-card>
+  </v-container>
 </template>
 <script>
 import Swal from "sweetalert2";
 export default {
-  props: {
-    idpartido: {
-      type: Number,
-      required: true,
-      default: 0
-    }
-  },
-  watch: {
-    idpartido(value) {
-      this.cambio.partido.idp = value;
-      this.getPartido();
-      this.getJugador();
+  computed: {
+    lista1() {
+      if (this.equipo.id == this.cambio.partido.equipo1.id) {
+        return this.entrantes1;
+      } else {
+        return this.entrantes2;
+      }
     },
-    equipo() {
-      this.getJugador();
+    lista2() {
+      if (this.equipo.id == this.cambio.partido.equipo1.id) {
+        return this.salientes1;
+      } else {
+        return this.salientes2;
+      }
     }
   },
   data() {
     return {
+      load: false,
       equipo: {},
       cambio: {
-        razon: "Normal",
+        minuto: this.$route.params.minuto,
+        razon: "",
         entrante: {},
         saliente: {},
         partido: {
-          idp: this.idpartido,
+          id: 0,
           equipo1: {
             id: 0,
             equipo: {
@@ -112,11 +165,23 @@ export default {
         }
       },
       razones: ["Normal", "Lesión", "Cansancio"],
-      jugadores: []
+      entrantes1: [],
+      entrantes2: [],
+      salientes1: [],
+      salientes2: []
     };
   },
   methods: {
+    salir() {
+      this.$router.push({
+        name: "partido",
+        params: {
+          id: this.$route.params.id
+        }
+      });
+    },
     async onSubmit() {
+      this.load = true;
       const URL = this.$path + "/cambio/Add";
       await this.$axios.post(URL, this.cambio).catch(e => console.log(e));
       await Swal.fire({
@@ -126,31 +191,54 @@ export default {
         showConfirmButton: false,
         timer: 1500
       });
+      this.salir();
     },
-    async getJugador() {
-      await this.$axios
-        .get(this.$path + `/carnet/FindAll/${this.equipo.id}`)
-        .then(response => {
-          this.jugadores = response.data;
-        })
-        .catch(e => console.log(e));
+    async getEntrante() {
+      var n = 2;
+      while (n > 0) {
+        await this.$axios
+          .get(this.$path + `/carnet/entrante/${this.$route.params.id}/` + n)
+          .then(response => {
+            if (n == 2) {
+              this.entrantes2 = response.data;
+            } else if (n == 1) {
+              this.entrantes1 = response.data;
+            }
+          })
+          .catch(e => console.log(e));
+        n--;
+      }
+    },
+    async getSaliente() {
+      var n = 2;
+      while (n > 0) {
+        await this.$axios
+          .get(this.$path + `/carnet/dentro/${this.$route.params.id}/` + n)
+          .then(response => {
+            if (n == 2) {
+              this.salientes2 = response.data;
+            } else if (n == 1) {
+              this.salientes1 = response.data;
+            }
+          })
+          .catch(e => console.log(e));
+        n--;
+      }
     },
     async getPartido() {
       await this.$axios
-        .get(this.$path + `/partido/FindBy/${this.cambio.partido.idp}`)
+        .get(this.$path + `/partido/FindBy/${this.$route.params.id}`)
         .then(response => {
           this.cambio.partido = response.data;
         })
         .catch(e => console.log(e));
       this.equipo = this.cambio.partido.equipo1;
     }
+  },
+  mounted() {
+    this.getPartido();
+    this.getEntrante();
+    this.getSaliente();
   }
 };
 </script>
-<style>
-.group-input {
-  width: 49%;
-  border: 1px solid rgb(187, 171, 171);
-  text-align: center;
-}
-</style>

@@ -1,44 +1,57 @@
 <template>
-  <b-card
-    :header="'Jornada ' + j.numero"
-    class="container-fluid"
-    align="center"
-    body-border-variant="dark"
-    bg-variant="dark"
-    border-variant="primary"
-    header-text-variant="white"
-    header-class="h4 badge-primary"
-  >
-    <b-card v-for="p in j.partidoList" :key="p.id">
-      <div class="row justify-content-start">
-        <div class="col">
+  <v-container>
+    <v-card>
+      <v-card-title class="green lighten-1 justify-center">
+        <v-avatar>
           <img
-            :src="p.equipo1.equipo.logo"
-            alt="logo1"
-            width="100px"
-            height="100px"
+            src="https://cdn3.iconfinder.com/data/icons/flat-artistic-common-1/32/application-next-256.png"
           />
-          <p>{{ p.equipo1.equipo.nombre }}</p>
-        </div>
-        <b-card-body title="Horario">
-          <b-card-text title="Dia">{{ p.horario.dia }}</b-card-text>
-          <b-card-text title="Hora">{{ p.horario.hora }}</b-card-text>
-          <b-button class="btn-info" @click="ir(p.id)"
-            >Registrar resultado</b-button
-          >
-        </b-card-body>
-        <div class="col">
-          <img
-            :src="p.equipo2.equipo.logo"
-            alt="logo1"
-            width="100px"
-            height="100px"
-          />
-          <p>{{ p.equipo2.equipo.nombre }}</p>
-        </div>
-      </div>
-    </b-card>
-  </b-card>
+        </v-avatar>
+        <h2 class="display-1 white--text font-weight-light">
+          Jornada #{{ j.numero }}
+        </h2>
+      </v-card-title>
+      <v-card-text>
+        <v-row
+          v-for="p in j.partidoList"
+          :key="p.id"
+          class="contenedor text-center"
+        >
+          <v-col cols="12" sm="4">
+            <img
+              :src="p.equipo1.equipo.logo"
+              alt="logo1"
+              width="100px"
+              height="100px"
+            />
+            <p>{{ p.equipo1.equipo.nombre }}</p>
+          </v-col>
+          <v-col cols="12" sm="4">
+            <v-col>
+            <span><strong>Dia:</strong>{{ p.horario.dia }}</span>
+            </v-col>
+            <v-col>
+            <span><strong>Hora:</strong>{{ p.horario.hora }}</span>
+            </v-col>
+            <v-btn @click="ir(p.id)" fab dark>
+              <v-avatar>
+              <img src="https://cdn3.iconfinder.com/data/icons/everyday-menu-6/64/arrow_next_go_forward-256.png"/>
+              </v-avatar>
+            </v-btn>
+          </v-col>
+          <v-col cols="12" sm="4">
+            <img
+              :src="p.equipo2.equipo.logo"
+              alt="logo1"
+              width="100px"
+              height="100px"
+            />
+            <p>{{ p.equipo2.equipo.nombre }}</p>
+          </v-col>
+        </v-row>
+      </v-card-text>
+    </v-card>
+  </v-container>
 </template>
 <script>
 export default {
@@ -73,4 +86,9 @@ export default {
   }
 };
 </script>
-<style></style>
+<style>
+.contenedor {
+  width: 80%;
+  margin-left: 10%;
+}
+</style>

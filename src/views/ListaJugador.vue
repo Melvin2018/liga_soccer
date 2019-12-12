@@ -1,127 +1,133 @@
 <template>
-  <div id="listadoJ" fluid>
-    <b-container>
-      <div class="bg-center">
-        <b-button v-b-modal.modal1>Agregar Jugador</b-button>
-      </div>
-      <input
-      v-model="name"
-        class="form-control form-control-lg form-control-borderless"
-        type="search"
-        placeholder="escriba el nombre"
-      />
-      <table class="table table-inverse table-hover text-center">
-        <thead>
-          <tr class="bg-dark text-light">
-            <th>Foto</th>
-            <th>Nombre</th>
-            <th>Dui</th>
-            <th>Altura</th>
-            <th>Edad</th>
-            <th>Posicion</th>
-            <th>Lugar</th>
-            <th>Opciones</th>
-          </tr>
-        </thead>
-        <tbody>
-          <tr v-for="j in search" :key="j.id">
-            <td><img :src="j.foto" height="40px" width="60px" alt="foto" /></td>
-            <td>{{ j.persona.nombres + " " + j.persona.apellidos }}</td>
-            <td>{{ j.persona.dui }}</td>
-            <td>{{ j.persona.altura }}</td>
-            <td>{{ j.persona.edad }}</td>
-            <td>{{ j.posicion }}</td>
-            <td>{{ j.persona.lugar.nombre }}</td>
-            <td>
-              <b-btn class="btn-success" ref="btnShow" @click="editar(j.id)"
-                >Editar</b-btn
-              >
-              <b-btn @click="eliminar(j.id)" class="btn-danger">Eliminar</b-btn>
-            </td>
-          </tr>
-        </tbody>
-      </table>
-    </b-container>
-    <Modal></Modal>
-    <Modal1 :id="id"></Modal1>
-  </div>
+  <v-container>
+    <v-card>
+      <v-card-title>
+        <v-btn color="primary" dark rounded @click="agregar">Agregar</v-btn>
+        <v-spacer></v-spacer>
+        <span class="text--darken-1 h3 text-justify">jugadores</span>
+        <v-spacer></v-spacer>
+        <v-text-field
+          v-model="search"
+          label="busqueda"
+          single-line
+          append-icon="mdi-magnify"
+        ></v-text-field>
+      </v-card-title>
+      <v-data-table
+        :headers="headers"
+        :items="jugadores"
+        :search="search"
+        :loading="load"
+        loading-text="cargando..."
+        item-key="id"
+        class="elevation-1"
+      >
+        <template v-slot:item.foto="{ item }">
+          <img :src="item.foto" :alt="item.nombre" height="40px" width="40px" />
+        </template>
+        <template v-slot:item.opciones="{ item }">
+          <v-row>
+            <v-btn @click="editar(item.id)">
+              <img
+                src="https://cdn1.iconfinder.com/data/icons/beautiful-line-icons/512/2_edit-256.png"
+                height="30px"
+                width="30px"
+            /></v-btn>
+            <v-btn @click="eliminar(item.id)">
+              <img
+                src="https://cdn1.iconfinder.com/data/icons/photos-collage-editor/22/delete-trash-remove-256.png"
+                height="30px"
+                width="30px"
+            /></v-btn>
+          </v-row>
+        </template>
+      </v-data-table>
+    </v-card>
+  </v-container>
 </template>
 <script>
-import Modal from "@/components/ModalJ";
-import Modal1 from "@/components/ModalJ1";
 import Swal from "sweetalert2";
 export default {
-  components: {
-    Modal,
-    Modal1
-  },
   data() {
     return {
-      id: 0,
-      name: "",
-      jugadores: []
+      load: true,
+      jugadores: [],
+      search: "",
+      headers: [
+        { text: "Foto", value: "foto" },
+        { text: "Nombre", value: "nombre" },
+        { text: "Dui", value: "dui" },
+        { text: "Edad", value: "edad" },
+        { text: "Lugar", value: "lugar" },
+        { text: "Posicion", value: "posicion" },
+        { text: "Opciones", value: "opciones" }
+      ]
     };
   },
-  created() {
+  mounted() {
     this.getJug();
   },
-  computed: {
-    search: function() {
-      return this.jugadores.filter(
-        item =>
-          item.persona.nombres.toUpperCase().includes(this.name.toUpperCase()) |
-          item.persona.apellidos.toUpperCase().includes(this.name.toUpperCase())
-      );
-    }
-  },
   methods: {
-    editar(id) {
-      this.id = id;
-      this.$root.$emit("bv::show::modal", "modalEdit", "#btnShow");
-    },
     async getJug() {
       const URL = this.$path + "/Jugador/All";
       await this.$axios
         .get(URL)
         .then(response => {
-          this.jugadores = response.data;
+          this.lista(response.data);
         })
         .catch(e => console.log(e));
+      this.load = false;
     },
-    eliminar(id) {
+    lista(listado) {
+      Array.from(listado).forEach(j => {
+        this.jugadores.push({
+          id: j.id,
+          foto: j.foto,
+          nombre: j.persona.nombres + " " + j.persona.apellidos,
+          dui: j.persona.dui,
+          edad: j.persona.edad,
+          lugar: j.persona.lugar.nombre,
+          posicion: j.posicion,
+          opciones: "ir"
+        });
+      });
+    },
+    agregar() {
+      this.$router.push({
+        name: "agregarj"
+      });
+    },
+    editar(idj) {
+      var id = parseInt(idj, 10);
+      this.$router.push({
+        name: "editarj",
+        params: {
+          id: id
+        }
+      });
+    },
+    async eliminar(id) {
       const URL = this.$path + `/Jugador/Delete/${id}`;
-      this.$axios
-        .delete(URL)
+      var b = false;
+      await this.$axios
+        .get(URL)
         .then(x => {
-          this.getJug();
-          var b = x.data;
-          if (b) {
-            Swal.fire({
-              position: "top-end",
-              type: "success",
-              title: "Se ha eliminado",
-              showConfirmButton: false,
-              timer: 1500
-            });
-          } else {
-            Swal.fire({
-              type: "error",
-              title: "Oops...",
-              text: "no puede eliminar este jugador!"
-            });
-          }
+          b = x.data;
         })
         .catch(e => console.log(e));
+      if (b) {
+        this.jugadores.splice(
+          this.jugadores.indexOf(this.jugadores.find(x => x.id == id)),
+          1
+        );
+      } else {
+        Swal.fire({
+          type: "error",
+          title: "Oops...",
+          text: "no puede eliminar este jugador!"
+        });
+      }
     }
   }
 };
 </script>
-<style>
-#buscador {
-  width: 80%;
-  margin-bottom: 10px;
-}
-table {
-  background-color: darkgray;
-}
-</style>

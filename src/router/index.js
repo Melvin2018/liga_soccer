@@ -10,37 +10,55 @@ const routes = [{
     },
     {
         path: '/jugador',
-        name: 'listJ',
+        name: 'listadoJugador',
         component: () =>
             import ('../views/ListaJugador.vue')
     },
     {
         path: '/equipo',
-        name: 'listE',
+        name: 'listEquipos',
         component: () =>
             import ('../views/ListadoEquipo.vue')
     },
     {
         path: '/tabla',
-        name: 'tablag',
+        name: 'tabla',
         component: () =>
             import ('../views/Tabla.vue')
     },
     {
         path: '/temporada',
-        name: 'listT',
+        name: 'temporada',
         component: () =>
             import ('../views/Temporada.vue')
     },
     {
         path: '/equipotemporada',
-        name: 'listET',
+        name: 'listadoET',
         component: () =>
             import ('../views/EquipoTList.vue')
     },
     {
+        path: '/equipotemporada/carnet/:id',
+        name: 'carnet',
+        component: () =>
+            import ('../components/Carnet.vue')
+    },
+    {
+        path: '/equipotemporada/equipo',
+        name: 'equipot',
+        component: () =>
+            import ('../components/EquipoT.vue')
+    },
+    {
+        path: '/equipotemporada/carnet/lista/:id',
+        name: 'carnetlist',
+        component: () =>
+            import ('../components/Carnets.vue')
+    },
+    {
         path: '/partidos',
-        name: 'part',
+        name: 'partidos',
         component: () =>
             import ('../views/Partidos.vue')
     },
@@ -48,6 +66,42 @@ const routes = [{
         path: '/partido/:id',
         name: 'partido',
         component: partido,
+    },
+    {
+        path: '/partido/formacion/:id',
+        name: 'formacion',
+        component: () =>
+            import ('../components/Formacion.vue')
+    },
+    {
+        path: '/jugador/editar/:id',
+        name: 'editarj',
+        component: () =>
+            import ('../components/EditarJ.vue')
+    },
+    {
+        path: '/jugador/agregar',
+        name: 'agregarj',
+        component: () =>
+            import ('../components/AgregarJ.vue')
+    },
+    {
+        path: '/partido/gol/:id/:minuto',
+        name: 'gol',
+        component: () =>
+            import ('../components/Gol.vue')
+    },
+    {
+        path: '/partido/cambio/:id/:minuto',
+        name: 'cambio',
+        component: () =>
+            import ('../components/Cambio.vue')
+    },
+    {
+        path: '/partido/tarjeta/:id/:minuto',
+        name: 'tarjeta',
+        component: () =>
+            import ('../components/Tarjeta.vue')
     },
     {
         path: '/jornada_actual',

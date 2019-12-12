@@ -1,8 +1,13 @@
 <template>
-<b-container>
+  <b-container>
     <b-card no-body>
-      <b-tabs pills card vertical>
-        <b-tab v-for="j in jornadas" :key="j.id" :title="'jornada ' + j.numero">
+      <b-tabs pills card vertical lazy no-fade>
+        <b-tab
+          v-for="j in jornadas"
+          :key="j.id"
+          :title="'jornada ' + j.numero"
+          title-link-class="text--darken-2"
+        >
           <b-card
             align="center"
             v-for="p in j.partidoList"
@@ -55,7 +60,7 @@ export default {
         })
         .catch(e => console.log(e));
     },
-    ir(){
+    ir() {
       this.$router.push("/partido");
     }
   },

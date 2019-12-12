@@ -1,89 +1,100 @@
 <template>
-  <b-container>
-    <div class="row">
-      <b-button v-if="showa" v-b-modal.modal class="btn btn-dark"
-        >Agregar equipo</b-button
+  <v-container>
+    <v-card>
+      <v-card-title>
+        <v-row>
+          <v-btn v-if="showa" dark rounded color="green" @click="equipo()"
+            >Agregar equipo</v-btn
+          >
+          <v-btn
+            v-if="showg"
+            :disabled="load"
+            :loading="load"
+            rounded
+            dark
+            color="green"
+            @click="generar()"
+          >
+            Generar partidos
+          </v-btn>
+        </v-row>
+        <v-spacer></v-spacer>
+        <span class="text--darken-1 h3 text-justify"
+          >Equipos en la temporada</span
+        >
+        <v-spacer></v-spacer>
+        <v-text-field
+          v-model="search"
+          label="busqueda"
+          single-line
+          append-icon="mdi-magnify"
+        ></v-text-field>
+      </v-card-title>
+      <v-data-table
+        :headers="headers"
+        :items="equipos"
+        :search="search"
+        :items-per-page="20"
+        hide-default-footer
+        item-key="id"
+        class="elevation-1"
       >
-      <v-button
-        v-if="showg"
-        id="boton"
-        :disabled="load"
-       :loading="load"
-        class="white--text"
-        color="purple darken-2"
-        @click="load"
-        >Generar partidos</v-button
-      >
-    </div>
-    <div class="row">
-      <table class="table table-inverse table-hover mt-5 table-bordered">
-        <thead>
-          <tr class="bg-dark text-light text-center">
-            <th>Logo</th>
-            <th>Equipo</th>
-            <th>Lugar</th>
-            <th>Representante</th>
-            <th>Jugadores</th>
-            <th>llenado</th>
-            <th>Opcion</th>
-          </tr>
-        </thead>
-        <tbody class="text-center border-dark">
-          <tr v-for="e in equipos" :key="e.id">
-            <td>
+        <template v-slot:item.logo="{ item }">
+          <v-avatar>
+            <img :src="item.logo" />
+          </v-avatar>
+        </template>
+        <template v-slot:item.repre="{ item }">
+          <v-row>
+            <v-avatar width="30" height="30">
+              <img :src="item.repre.foto" />
+            </v-avatar>
+            <span>
+              {{ item.repre.persona.nombres }}
+            </span>
+          </v-row>
+        </template>
+        <template v-slot:item.jugador="{ item }">
+          <v-row>
+            <v-btn :disabled="item.progreso == 0" @click="listaj(item.id)">
               <img
-                :src="e.equipo.equipo.logo"
-                height="40px"
-                width="60px"
-                alt="foto"
-              />
-            </td>
-            <td>{{ e.equipo.equipo.nombre }}</td>
-            <td>{{ e.equipo.equipo.lugar.nombre }}</td>
-            <td>{{ e.equipo.representante.persona.nombres }}</td>
-            <td>
-              <b-button
-                class="btn btn-info"
-                @click="llenar1(e.equipo.id, e.equipo.equipo.nombre)"
-                ref="btnShow1"
-                >Jugadores</b-button
-              >
-            </td>
-            <td>
-              <b-progress
-                :max="18"
-                :value="e.integrantes"
-                show-value
-                animated
-              ></b-progress>
-            </td>
-            <td>
-              <b-button
-                @click="llenar(e.equipo.id)"
-                ref="btnShow"
-                :disabled="e.integrantes == 18"
-                class="btn-outline-dark"
-                id="boton1"
-                >Agregar Jugador</b-button
-              >
-            </td>
-          </tr>
-        </tbody>
-      </table>
-    </div>
-    <Modal :idequipo="id"></Modal>
-    <Modal1></Modal1>
-    <Lista :idequipo="id" :title="nombre"></Lista>
-     <v-dialog
-      v-model="load"
-      hide-overlay
-      persistent
-      width="300"
-    >
-      <v-card
-        color="primary"
-        dark
-      >
+                src="https://cdn1.iconfinder.com/data/icons/delivery-logistics/512/shopping_list-256.png"
+                height="30px"
+                width="30px"
+            /></v-btn>
+          </v-row>
+        </template>
+        <template v-slot:item.progreso="{ item }">
+          <v-progress-linear
+            :value="(item.progreso * 100) / 18"
+            color="light-green darken-4"
+            height="25"
+            striped
+            buffer-value="0"
+            stream
+          >
+            <span class="darken-2">{{ item.progreso }}</span>
+          </v-progress-linear>
+        </template>
+        <template v-slot:item.opcion="{ item }">
+          <v-row align="center" justify="center">
+            <v-btn
+              :disabled="item.progreso > 17"
+              light
+              tile
+              @click="agregar(item.id)"
+            >
+              <img
+                src="https://cdn4.iconfinder.com/data/icons/silky-icon-user-filled-in/60/user2-add-256.png"
+                height="30px"
+                width="30px"
+            /></v-btn>
+          </v-row>
+        </template>
+      </v-data-table>
+    </v-card>
+    <v-dialog v-model="load" hide-overlay persistent width="300">
+      <v-card color="primary" dark>
         <v-card-text>
           Espere mientras carga
           <v-progress-linear
@@ -94,18 +105,10 @@
         </v-card-text>
       </v-card>
     </v-dialog>
-  </b-container>
+  </v-container>
 </template>
 <script>
-import Modal from "@/components/CModal";
-import Modal1 from "@/components/ETModal";
-import Lista from "@/components/Jugadores";
 export default {
-  components: {
-    Modal,
-    Lista,
-    Modal1
-  },
   data() {
     return {
       load: false,
@@ -113,42 +116,73 @@ export default {
       nombre: "",
       showa: false,
       showg: false,
-      equipos: []
+      search: "",
+      equipos: [],
+      headers: [
+        { text: "Logo", value: "logo" },
+        { text: "Equipo", value: "equipo" },
+        { text: "Lugar", value: "lugar" },
+        { text: "Representante", value: "repre" },
+        { text: "Jugadores", value: "jugador" },
+        { text: "Progreso", value: "progreso" },
+        { text: "Incorporar", value: "opcion" }
+      ]
     };
   },
-watch: {
-      load (val) {
-        if (!val) return
-        setTimeout(() => (this.load = false), 30000)
-      },
-    },
-  mounted() {
-    this.getList();
-    this.getval();
-    this.getshowg();
+  watch: {
+    load(val) {
+      if (!val) return;
+      setTimeout(() => (this.load = false), 40000);
+    }
   },
   methods: {
+    equipo() {
+      this.$router.push({
+        name: "equipot"
+      });
+    },
+    listaj(id) {
+      this.$router.push({
+        name: "carnetlist",
+        params: {
+          id: id
+        }
+      });
+    },
+    agregar(id) {
+      this.$router.push({
+        name: "carnet",
+        params: {
+          id: id
+        }
+      });
+    },
     async generar() {
       this.load = true;
       const URL = this.$path + "/partido/Generar";
       await this.$axios.get(URL).catch(e => console.log(e));
       this.$router.push("/partidos");
     },
-    llenar(ids) {
-      this.id = ids;
-      this.$root.$emit("bv::show::modal", "modal1", "#btnShow");
-    },
-    llenar1(ids, nom) {
-      this.id = ids;
-      this.nombre = nom;
-      this.$root.$emit("bv::show::modal", "modallistado", "#btnShow1");
+    lista(listado) {
+      Array.from(listado).forEach(j => {
+        this.equipos.push({
+          id: j.equipo.id,
+          logo: j.equipo.equipo.logo,
+          equipo: j.equipo.equipo.nombre,
+          lugar: j.equipo.equipo.lugar.nombre,
+          repre: j.equipo.representante,
+          jugador: "",
+          progreso: j.integrantes,
+          opcion: "ir"
+        });
+      });
     },
     getList() {
       const URL = this.$path + "/equipoT/dentro";
       this.$axios
         .get(URL)
         .then(response => {
-          this.equipos = response.data;
+          this.lista(response.data);
         })
         .catch(e => console.log(e));
     },
@@ -158,9 +192,6 @@ watch: {
         .get(URL)
         .then(response => {
           this.showg = response.data;
-          if (response.data == null) {
-            load = true;
-          }
         })
         .catch(e => console.log(e));
     },
@@ -173,14 +204,16 @@ watch: {
         })
         .catch(e => console.log(e));
     }
+  },
+  mounted() {
+    this.getList();
+    this.getval();
+    this.getshowg();
   }
 };
 </script>
 <style>
-table {
-  background-color: darkgray;
-}
-#boton {
+button {
   margin-left: 10px;
 }
 </style>

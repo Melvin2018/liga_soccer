@@ -29,19 +29,11 @@
         </tbody>
       </table>
     </b-container>
-    <Modal></Modal>
-    <Modal1 :idequipo="idequipo"></Modal1>
   </div>
 </template>
 <script>
-import Modal from "@/components/ModalE";
-import Modal1 from "@/components/ModalE1";
 import Swal from "sweetalert2";
 export default {
-  components: {
-    Modal,
-    Modal1
-  },
   data() {
     return {
       idequipo: 0,

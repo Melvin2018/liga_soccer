@@ -1,49 +1,74 @@
 <template>
-  <b-container>
-    <table class="table table-inverse table-hover">
-      <thead>
-        <tr class="bg-dark text-light">
-          <th>N°</th>
-          <th>Equipo</th>
-          <th>Puntos</th>
-          <th>PJ</th>
-          <th>PG</th>
-          <th>PE</th>
-          <th>PP</th>
-          <th>GF</th>
-          <th>GC</th>
-          <th>DG</th>
-        </tr>
-      </thead>
-      <tbody>
-        <tr v-for="(t,index) in tabla" :key="t.id">
-          <td>{{ index+1 }}</td>
-          <td>
-            <img
-              :src="t.equipo.equipo.logo"
-              height="20px"
-              width="20px"
-              alt="foto"
-            />
-            {{ t.equipo.equipo.nombre }}
-          </td>
-          <td>{{ t.puntos }}</td>
-          <td>{{ t.pj }}</td>
-          <td>{{ t.pg }}</td>
-          <td>{{ t.pe }}</td>
-          <td>{{ t.pp }}</td>
-          <td>{{ t.gf }}</td>
-          <td>{{ t.gc }}</td>
-          <td>{{ t.gf - t.gc }}</td>
-        </tr>
-      </tbody>
-    </table>
-  </b-container>
+  <v-container>
+    <v-card>
+      <v-card-title class="green lighten-1 justify-center">
+        <v-spacer></v-spacer>
+        <v-avatar>
+          <img
+            src="https://cdn1.iconfinder.com/data/icons/hawcons/32/699311-icon-40-clipboard-list-256.png"
+          />
+        </v-avatar>
+        <h2 class="display-1 white--text font-weight-light">
+          Posiciones
+        </h2>
+        <v-spacer></v-spacer>
+        <v-text-field
+          v-model="search"
+          label="busqueda"
+          single-line
+          append-icon="mdi-magnify"
+        ></v-text-field>
+      </v-card-title>
+      <v-data-table
+        :headers="headers"
+        :items="tabla"
+        :search="search"
+        :loading="load"
+        hide-default-footer
+        :items-per-page="20"
+        loading-text="cargando..."
+        item-key="id"
+        class="elevation-1"
+      >
+        <template v-slot:item.id="{ item }">
+          {{
+            tabla
+              .map(x => {
+                return x.id;
+              })
+              .indexOf(item.id) + 1
+          }}
+        </template>
+        <template v-slot:item.nombre="{ item }">
+          <img :src="item.equipo.equipo.logo" height="40px" width="40px" />{{
+            item.equipo.equipo.nombre
+          }}
+        </template>
+        <template v-slot:item.dg="{ item }">
+          {{ item.gf - item.gc }}
+        </template>
+      </v-data-table>
+    </v-card>
+  </v-container>
 </template>
 <script>
 export default {
   data() {
     return {
+      load: true,
+      search: "",
+      headers: [
+        { text: "N°", value: "id" },
+        { text: "Equipo", value: "nombre" },
+        { text: "Puntos", value: "puntos" },
+        { text: "PJ", value: "pj" },
+        { text: "PG", value: "pg" },
+        { text: "PE", value: "pe" },
+        { text: "PP", value: "pp" },
+        { text: "GF", value: "gf" },
+        { text: "GC", value: "gc" },
+        { text: "DG", value: "dg" }
+      ],
       tabla: []
     };
   },
@@ -53,17 +78,31 @@ export default {
       await this.$axios
         .get(URL)
         .then(response => {
-          this.tabla = response.data;
+          this.lista(response.data);
         })
         .catch(e => console.log(e));
+      this.load = false;
+    },
+    lista(listado) {
+      Array.from(listado).forEach(j => {
+        this.tabla.push({
+          id: j.id,
+          equipo: j.equipo,
+          nombre: j.equipo.equipo.nombre,
+          puntos: j.puntos,
+          pj: j.pj,
+          pg: j.pg,
+          pe: j.pe,
+          pp: j.pp,
+          gf: j.gf,
+          gc: j.gc,
+          dg: j.dg
+        });
+      });
     }
-  }, mounted(){
-      this.getTabla();
+  },
+  mounted() {
+    this.getTabla();
   }
 };
 </script>
-<style>
-table{
-	background-color:darkgray;
-}
-</style>
