@@ -72,21 +72,23 @@
             <p>{{ partido.equipo1.equipo.nombre }}</p>
           </v-col>
           <v-col>
-            <b-card-body title="Horario" v-if="false">
-              <v-card-text title="Dia">{{ partido.horario.dia }}</v-card-text>
-              <v-card-text title="Hora">{{ partido.horario.hora }}</v-card-text>
-            </b-card-body>
-            <b-card-body v-else>
-              <v-card-text>
-                <v-row class="h3" align="center" justify="center">
-                  <span>{{ gol1 }}</span>
-                  <v-spacer></v-spacer>
-                  <span>-</span>
-                  <v-spacer></v-spacer>
-                  <span>{{ gol2 }}</span>
-                </v-row></v-card-text
-              >
-            </b-card-body>
+            <v-row align="center" justify="center" v-if="!this.inicio">
+              <v-col cols="12">
+                <span><strong>Dia:</strong>{{ partido.horario.dia }}</span>
+              </v-col>
+              <v-col cols="12">
+                <span><strong>Hora:</strong>{{ partido.horario.hora }}</span>
+              </v-col>
+            </v-row>
+            <v-row align="center" v-else>
+              <v-row class="h3" align="center" justify="center">
+                <span>{{ gol1 }}</span>
+                <v-spacer></v-spacer>
+                <span>-</span>
+                <v-spacer></v-spacer>
+                <span>{{ gol2 }}</span>
+              </v-row>
+            </v-row>
           </v-col>
           <v-col>
             <img
@@ -434,87 +436,63 @@ export default {
       var lista = [];
       var gol1 = 0;
       var gol2 = 0;
-      this.mensajes.filter(x=>x.tipo=='gol').forEach(x=>{
-         if (x.equipo) {
-              gol1++;
-            } else {
-              gol2++;
-            }
-      });
+      this.mensajes
+        .filter(x => x.tipo == "gol")
+        .forEach(x => {
+          if (x.equipo) {
+            gol1++;
+          } else {
+            gol2++;
+          }
+        });
       if (this.finalizado) {
         var min = 0;
         var extra = 0;
+        var now;
         var sec = this.$moment(Date.parse(this.partido.segundot));
-        var now = this.$moment(Date.parse(this.partido.finalizado));
+        if (this.partido.finalizado != null) {
+          now = this.$moment(Date.parse(this.partido.finalizado));
+        } else {
+          now = this.$moment(new Date());
+        }
         var minutos = Math.round(now.diff(sec, "seconds") / 60);
         if (minutos > 45) {
           min = 90;
           extra = minutos - 45;
         } else {
-          min = minutos + 45;
+          min = 90;
+        }
+        var minu = "";
+        if (extra == 0) {
+          minu = min.toString;
+        } else {
+          minu = min + "+" + extra;
         }
         lista.push({
           titulo: "final de partido",
           img: this.lista.find(x => x.titulo == "final").img,
-          minuto: min + "+" + extra + "'"
+          minuto: minu
         });
       }
-      this.mensajes
-        .filter(x => x.minuto > 45)
-        .forEach(x => {
-          lista.push({
-            titulo: x.tipo,
-            dato: x.dato,
-            img: this.lista.find(t => t.titulo == x.tipo).img,
-            minuto: x.minuto,
-            favor: gol1,
-            contra: gol2,
-            jugador1: x.jugador1,
-            jugador2: x.jugador2
-          });
-            if (x.tipo == "gol") {
-           if (x.equipo) {
-              gol1--;
-            } else {
-              gol2--;
-            }
-          }
-        });
-      /*if (this.medio & !this.pausa) {
-        var ini = new Date(this.partido.segundot);
+      this.mensajes.forEach(x => {
         lista.push({
-          titulo: "comienza el segundo tiempo",
-          img: this.lista.find(x => x.titulo == "reanudar").img,
-          minuto: ini.getHours().toString() + ":" + ini.getMinutes()
+          titulo: x.tipo,
+          dato: x.dato,
+          img: this.lista.find(t => t.titulo == x.tipo).img,
+          minuto: x.minuto,
+          favor: gol1,
+          contra: gol2,
+          jugador1: x.jugador1,
+          jugador2: x.jugador2
         });
-      }
-      if (this.medio) {
-        lista.push({
-          titulo: "termina la primera parte",
-          img: this.lista.find(x => x.titulo == "medio").img
-        });
-      }*/
-      this.mensajes
-        .filter(x => x.minuto <= 45)
-        .forEach(x => {
-          lista.push({
-            titulo: x.tipo,
-            img: this.lista.find(t => t.titulo == x.tipo).img,
-            minuto: x.minuto,
-            dato: x.dato,
-            favor: gol1,
-            contra: gol2,
-            jugador1: x.jugador1,
-            jugador2: x.jugador2
-          });
-          if (x.tipo == "gol") {
-           if (x.equipo) {
-              gol1--;
-            } else {
-              gol2--;
-            }
+        if (x.tipo == "gol") {
+          if (x.equipo) {
+            gol1--;
+          } else {
+            gol2--;
           }
-        });
+        }
+      });
       if (this.inicio) {
         var ini = new Date(this.partido.fecha);
         lista.push({
@@ -626,16 +604,15 @@ export default {
     };
   },
   methods: {
-    color(v){
-      if(v=='tarjeta roja'|v=='roja y amarilla'){
-        return 'red';
-      }
-     else if (v=='tarjeta amarilla'|v=='doble amarilla'){
-        return 'yellow';
-      }else if(v=='cambio'){
-        return 'green';
-      }else{
-        return 'blue';
+    color(v) {
+      if ((v == "tarjeta roja") | (v == "roja y amarilla")) {
+        return "red";
+      } else if ((v == "tarjeta amarilla") | (v == "doble amarilla")) {
+        return "yellow";
+      } else if (v == "cambio") {
+        return "green";
+      } else {
+        return "blue";
       }
     },
     imagen(v) {
@@ -699,7 +676,8 @@ export default {
             this.tiempo += 1;
           }
         }
-      }, 59998);
+      }, 598);
+      //  }, 59998);
     },
     tiempov() {
       if (this.partido.descanso != 3) {

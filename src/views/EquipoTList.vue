@@ -93,18 +93,6 @@
         </template>
       </v-data-table>
     </v-card>
-    <v-dialog v-model="load" hide-overlay persistent width="300">
-      <v-card color="primary" dark>
-        <v-card-text>
-          Espere mientras carga
-          <v-progress-linear
-            indeterminate
-            color="white"
-            class="mb-0"
-          ></v-progress-linear>
-        </v-card-text>
-      </v-card>
-    </v-dialog>
   </v-container>
 </template>
 <script>
@@ -128,12 +116,6 @@ export default {
         { text: "Incorporar", value: "opcion" }
       ]
     };
-  },
-  watch: {
-    load(val) {
-      if (!val) return;
-      setTimeout(() => (this.load = false), 40000);
-    }
   },
   methods: {
     equipo() {
@@ -161,6 +143,7 @@ export default {
       this.load = true;
       const URL = this.$path + "/partido/Generar";
       await this.$axios.get(URL).catch(e => console.log(e));
+      this.load = false;
       this.$router.push("/partidos");
     },
     lista(listado) {

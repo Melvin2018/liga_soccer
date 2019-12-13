@@ -10,13 +10,14 @@ import firebase from 'firebase/app'
 import vuetify from './plugins/vuetify'
 import moment from "moment"
 import VueMomentJS from "vue-momentjs"
+import VueLodash from 'vue-lodash'
 import 'bootstrap/dist/css/bootstrap.css'
 import 'bootstrap-vue/dist/bootstrap-vue.css'
 import 'sweetalert2/dist/sweetalert2.min.css'
 import '@babel/polyfill'
 import 'roboto-fontface/css/roboto/roboto-fontface.css'
 import '@mdi/font/css/materialdesignicons.css'
-Vue.prototype.$path = "http://localhost:8080"
+Vue.prototype.$path = "http://192.168.43.16:8080"
 Vue.prototype.$axios = axios
 firebase.initializeApp({
     apiKey: "AIzaSyDivyvXgYoDQnLX8j02ErCs3upsm6OiFKY",
@@ -33,6 +34,8 @@ Vue.use(VueSweetalert2)
 Vue.use(VueAxios, axios)
 Vue.use(BootstrapVue)
 Vue.use(vuetify)
+Vue.use(VueLodash, options)
+const options = { name: 'lodash' }
 Vue.config.productionTip = false;
 new Vue({
     router,

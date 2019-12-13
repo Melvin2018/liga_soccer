@@ -119,7 +119,7 @@ export default {
       load: false,
       equipo: {},
       gol: {
-        forma: "",
+        forma: "Jugada normal",
         minuto: this.$route.params.minuto,
         tipo: true,
         carnet: {},
@@ -139,7 +139,7 @@ export default {
           }
         }
       },
-      formas: ["Jugada normal", "Tiro libre", "Penal", "cabeza"],
+      formas: ["Jugada normal","Autogol", "Tiro libre", "Penal", "cabeza"],
       jugadores: [],
       jugadores1: []
     };

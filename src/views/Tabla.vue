@@ -44,9 +44,6 @@
             item.equipo.equipo.nombre
           }}
         </template>
-        <template v-slot:item.dg="{ item }">
-          {{ item.gf - item.gc }}
-        </template>
       </v-data-table>
     </v-card>
   </v-container>
@@ -96,7 +93,7 @@ export default {
           pp: j.pp,
           gf: j.gf,
           gc: j.gc,
-          dg: j.dg
+          dg: j.gf-j.gc
         });
       });
     }

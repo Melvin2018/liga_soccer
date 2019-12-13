@@ -86,6 +86,12 @@ const routes = [{
             import ('../components/AgregarJ.vue')
     },
     {
+        path: '/temporada/estadisticas',
+        name: 'estadistica',
+        component: () =>
+            import ('../views/Estadisticas.vue')
+    },
+    {
         path: '/partido/gol/:id/:minuto',
         name: 'gol',
         component: () =>

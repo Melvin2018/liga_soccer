@@ -63,6 +63,16 @@
           </v-list-item-icon>
           <v-list-item-title>Temporada Actual</v-list-item-title>
         </v-list-item>
+        <v-list-item link href="/temporada/estadisticas">
+          <v-list-item-icon>
+            <v-img
+              height="30px"
+              width="30px"
+              src="https://cdn1.iconfinder.com/data/icons/science-41/64/Statistics-256.png"
+            ></v-img>
+          </v-list-item-icon>
+          <v-list-item-title>Estadisticas</v-list-item-title>
+        </v-list-item>
         <v-list-item link href="/temporada">
           <v-list-item-icon>
             <v-img
