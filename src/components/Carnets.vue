@@ -23,7 +23,7 @@
         :headers="headers"
         :items="jugadores"
         :search="search"
-        :items-per-page="18"
+        :items-per-page="20"
         hide-default-footer
         class="elevation-1"
       >
@@ -98,12 +98,29 @@ export default {
       });
     },
     eliminar(id) {
-      this.jugadores.splice(
-        this.jugadores.indexOf(this.jugadores.find(x => x.id == id)),
-        1
-      );
+      var res = false;
       const URL = this.$path + `/carnet/Delete/${id}`;
-      this.$axios.get(URL).catch(e => console.log(e));
+      this.$axios
+        .get(URL)
+        .then(x => {
+          res = x.data;
+        })
+        .catch(e => console.log(e));
+      if (res) {
+        this.jugadores.splice(
+          this.jugadores.indexOf(this.jugadores.find(x => x.id == id)),
+          1
+        );
+      }else{
+         Swal.fire({
+          timer: 1500,
+          position: "top-end",
+          type: "error",
+          title: "no puede borrarlo",
+          showConfirmButton: false,
+          animation: true
+        });
+      }
     }
   },
   created() {

@@ -47,7 +47,7 @@
               <v-spacer></v-spacer>
               <span v-if="p.partido.finalizado != null">-</span>
               <v-col cols="6" v-else>
-                <b-progress variant="success" animated></b-progress>
+                <v-progress-linear color="green" stream buffer-value="0"></v-progress-linear>
               </v-col>
               <v-spacer></v-spacer>
               <span>{{ p.gol2 }}</span>

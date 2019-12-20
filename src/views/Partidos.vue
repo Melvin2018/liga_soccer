@@ -40,11 +40,22 @@
                   <v-spacer></v-spacer>
                   <span v-if="p.partido.finalizado != null">-</span>
                   <v-col cols="6" v-else>
-                    <b-progress variant="success" animated></b-progress>
+                    <v-progress-linear
+                      color="green"
+                      stream
+                      buffer-value="0"
+                    ></v-progress-linear>
                   </v-col>
                   <v-spacer></v-spacer>
                   <span>{{ p.gol2 }}</span>
                 </v-row>
+                <v-btn @click="ir(p.partido.id)" fab dark>
+                  <v-avatar>
+                    <img
+                      src="https://cdn3.iconfinder.com/data/icons/everyday-menu-6/64/arrow_next_go_forward-256.png"
+                    />
+                  </v-avatar>
+                </v-btn>
               </v-col>
               <div class="col">
                 <img
@@ -86,6 +97,14 @@ export default {
     };
   },
   methods: {
+    ir(idpar) {
+      this.$router.push({
+        name: "partido",
+        params: {
+          id: idpar
+        }
+      });
+    },
     partidos1(id) {
       return this.partidos.filter(x => x.jornada.id == id);
     },
@@ -97,9 +116,6 @@ export default {
         })
         .catch(e => console.log(e));
     },
-    ir() {
-      this.$router.push("/partido");
-    }
   },
   mounted() {
     this.getJornadas();

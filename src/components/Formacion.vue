@@ -23,7 +23,6 @@
                     :items="carnets1"
                     item-key="id"
                     show-select
-                    hide-default-header
                     hide-default-footer
                     :items-per-page="carnets1.length"
                     dense
@@ -95,7 +94,6 @@
                     :items="carnets2"
                     item-key="id"
                     show-select
-                    hide-default-header
                     hide-default-footer
                     :items-per-page="carnets2.length"
                     dense

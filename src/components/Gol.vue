@@ -63,8 +63,11 @@
                       <v-avatar height="30" width="30">
                         <img :src="data.item.jugador.foto" />
                       </v-avatar>
-                      {{ data.item.jugador.persona.nombres }}
-                      {{ data.item.jugador.persona.apellidos }}
+                      <span class="span">{{ data.item.dorsal }}</span>
+                      <span>
+                        {{ data.item.jugador.persona.nombres }}
+                        {{ data.item.jugador.persona.apellidos }}
+                      </span>
                     </template>
                   </v-select>
                 </v-col>
@@ -139,7 +142,7 @@ export default {
           }
         }
       },
-      formas: ["Jugada normal","Autogol", "Tiro libre", "Penal", "cabeza"],
+      formas: ["Jugada normal", "Autogol", "Tiro libre", "Penal", "cabeza"],
       jugadores: [],
       jugadores1: []
     };
@@ -202,5 +205,9 @@ export default {
 <style>
 .margin {
   margin-left: 40%;
+}
+.span {
+  color: darkgreen;
+  margin-right: 7px;
 }
 </style>

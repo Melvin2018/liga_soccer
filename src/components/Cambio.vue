@@ -72,8 +72,11 @@
                           <v-avatar>
                             <img :src="data.item.jugador.foto" />
                           </v-avatar>
-                          {{ data.item.jugador.persona.nombres }}
-                          {{ data.item.jugador.persona.apellidos }}
+                          <span class="span">{{ data.item.dorsal }}</span>
+                          <span>
+                            {{ data.item.jugador.persona.nombres }}
+                            {{ data.item.jugador.persona.apellidos }}
+                          </span>
                         </template>
                       </v-select>
                     </v-col>
@@ -98,8 +101,11 @@
                           <v-avatar>
                             <img :src="data.item.jugador.foto" />
                           </v-avatar>
-                          {{ data.item.jugador.persona.nombres }}
-                          {{ data.item.jugador.persona.apellidos }}
+                          <span class="span">{{ data.item.dorsal }} </span>
+                          <span>
+                            {{ data.item.jugador.persona.nombres }}
+                            {{ data.item.jugador.persona.apellidos }}
+                          </span>
                         </template>
                       </v-select>
                     </v-col>
@@ -242,3 +248,9 @@ export default {
   }
 };
 </script>
+<style>
+.span{
+ color:darkgreen; 
+ margin-right: 7px;
+}
+</style>

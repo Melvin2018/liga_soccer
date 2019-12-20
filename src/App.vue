@@ -120,7 +120,7 @@ export default {
 </script>
 <style>
 #contenedor {
-  background-image: url(./assets/fondo.jpg);
+  background-image:  url(./assets/fondo.jpg);
   background-size: cover;
 }
 </style>

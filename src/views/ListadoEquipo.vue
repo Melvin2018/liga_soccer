@@ -1,93 +1,127 @@
 <template>
-  <div id="listadoE" fluid>
-    <b-container>
-      <div class="absolute-center">
-        <b-button v-b-modal.modal2>Agregar Equipo</b-button>
-      </div>
-      <table class="table table-inverse table-hover mt-5 text-center">
-        <thead>
-          <tr class="bg-dark text-light">
-            <th>Foto</th>
-            <th>Nombre</th>
-            <th>Lugar</th>
-            <th>Opciones</th>
-          </tr>
-        </thead>
-        <tbody>
-          <tr v-for="e in equipos" :key="e.id">
-            <td><img :src="e.logo" height="60px" width="60px" alt="foto" /></td>
-
-            <td>{{ e.nombre }}</td>
-            <td>{{ e.lugar.nombre }}</td>
-            <td>
-              <b-btn @click="editar(e.id)" class="btn-success" ref="btnShow"
-                >Editar</b-btn
-              >
-              <b-btn @click="eliminar(e.id)" class="btn-danger">Eliminar</b-btn>
-            </td>
-          </tr>
-        </tbody>
-      </table>
-    </b-container>
-  </div>
+  <v-container>
+    <v-card>
+      <v-card-title>
+        <v-btn color="primary" dark rounded @click="agregar">Agregar</v-btn>
+        <v-spacer></v-spacer>
+        <span class="text--darken-1 h3 text-justify">Equipos</span>
+        <v-spacer></v-spacer>
+        <v-text-field
+          v-model="search"
+          label="busqueda"
+          single-line
+          append-icon="mdi-magnify"
+        ></v-text-field>
+      </v-card-title>
+      <v-data-table
+        :headers="headers"
+        :items="equipos"
+        :search="search"
+        :loading="load"
+        loading-text="cargando..."
+        item-key="id"
+        class="elevation-1"
+      >
+        <template v-slot:item.logo="{ item }">
+          <img :src="item.logo" :alt="item.nombre" height="40px" width="40px" />
+        </template>
+        <template v-slot:item.opciones="{ item }">
+          <v-row>
+            <v-btn @click="editar(item.id)">
+              <img
+                src="https://cdn1.iconfinder.com/data/icons/beautiful-line-icons/512/2_edit-256.png"
+                height="30px"
+                width="30px"
+            /></v-btn>
+            <v-btn @click="eliminar(item.id)">
+              <img
+                src="https://cdn1.iconfinder.com/data/icons/photos-collage-editor/22/delete-trash-remove-256.png"
+                height="30px"
+                width="30px"
+            /></v-btn>
+          </v-row>
+        </template>
+      </v-data-table>
+    </v-card>
+  </v-container>
 </template>
 <script>
 import Swal from "sweetalert2";
 export default {
   data() {
     return {
-      idequipo: 0,
-      equipos: []
+      load: true,
+      equipos: [],
+      search: "",
+      headers: [
+        { text: "Foto", value: "logo" },
+        { text: "Nombre", value: "nombre" },
+        { text: "Lugar", value: "lugar" },
+        { text: "Opciones", value: "opciones" }
+      ]
     };
   },
   mounted() {
-    this.getList();
+    this.getJug();
   },
   methods: {
-    editar(ids) {
-      this.idequipo = ids;
-      this.$root.$emit("bv::show::modal", "modalEdit", "#btnShow");
-    },
-    async getList() {
+    async getJug() {
+      const URL = this.$path + "/equipo/All";
       await this.$axios
-        .get(this.$path + "/equipo/All")
+        .get(URL)
         .then(response => {
-          this.equipos = response.data;
+          this.lista(response.data);
         })
         .catch(e => console.log(e));
+      this.load = false;
     },
-    eliminar(id) {
+    lista(listado) {
+      Array.from(listado).forEach(j => {
+        this.equipos.push({
+          id: j.id,
+          logo: j.logo,
+          nombre: j.nombre,
+          lugar: j.lugar.nombre
+        });
+      });
+    },
+    agregar() {
+      this.$router.push({
+        name: "agregare"
+      });
+    },
+    editar(idj) {
+      var id = parseInt(idj, 10);
+      this.$router.push({
+        name: "editare",
+        params: {
+          id: id
+        }
+      });
+    },
+    async eliminar(id) {
       const URL = this.$path + `/equipo/Delete/${id}`;
-      THIS.$axios
-        .delete(URL)
+      var b = false;
+      await this.$axios
+        .get(URL)
         .then(x => {
-          this.getList();
-          if (x.data) {
-            Swal.fire({
-              position: "top-end",
-              type: "success",
-              title: "Se ha eliminado",
-              showConfirmButton: false,
-              timer: 1500
-            });
-          } else {
-            Swal.fire({
-              type: "error",
-              title: "Oops...",
-              text: "No puede eliminar este equipo!"
-            });
-          }
+          b = x.data;
         })
         .catch(e => console.log(e));
+      if (b) {
+        this.equipos.splice(
+          this.equipos.indexOf(this.equipos.find(x => x.id == id)),
+          1
+        );
+        
+      } else {
+        Swal.fire({
+          type: "error",
+          title: "Equipo con registro",
+          text: "este equipo ya esta vinculado a una temporada!"
+        });
+      }
     }
   }
 };
 </script>
-<style>
-table {
-  background-color: white;
-}
-button {
-  margin-left: 10px;
-}
-</style>

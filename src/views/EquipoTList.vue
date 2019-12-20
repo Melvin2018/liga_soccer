@@ -66,7 +66,7 @@
         </template>
         <template v-slot:item.progreso="{ item }">
           <v-progress-linear
-            :value="(item.progreso * 100) / 18"
+            :value="(item.progreso * 100) / 19"
             color="light-green darken-4"
             height="25"
             striped
@@ -79,7 +79,7 @@
         <template v-slot:item.opcion="{ item }">
           <v-row align="center" justify="center">
             <v-btn
-              :disabled="item.progreso > 17"
+              :disabled="item.progreso > 18"
               light
               tile
               @click="agregar(item.id)"

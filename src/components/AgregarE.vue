@@ -8,7 +8,7 @@
           />
         </v-avatar>
         <h2 class="display-1 white--text font-weight-light">
-          Editando carnet
+          Agregando equipo
         </h2>
       </v-card-title>
       <v-card-text>
@@ -16,29 +16,8 @@
           <v-row align="center" justify="center">
             <v-col cols="12" sm="6" md="8">
               <v-text-field
-                v-model="jugador.persona.nombres"
+                v-model="equipo.nombre"
                 label="Nombre"
-              ></v-text-field>
-            </v-col>
-            <v-col cols="12" sm="6" md="8">
-              <v-text-field
-                v-model="jugador.persona.apellidos"
-                label="Apellido"
-              ></v-text-field>
-            </v-col>
-            <v-col cols="12" sm="6" md="8">
-              <v-text-field
-                v-model="jugador.persona.edad"
-                type="number"
-                label="Edad"
-              ></v-text-field>
-            </v-col>
-            <v-col cols="12" sm="6" md="8">
-              <v-text-field
-                v-model="jugador.persona.dui"
-                label="Dui"
-                v-mask="mask"
-                masked="true"
               ></v-text-field>
             </v-col>
             <v-col cols="12" sm="6" md="8">
@@ -52,20 +31,7 @@
             </v-col>
             <v-col class="d-flex" cols="12" sm="6" md="8">
               <v-select
-                v-model="jugador.posicion"
-                required
-                :items="posiciones"
-                item-text="nombre"
-                item-value="nombre"
-                label="Posicion"
-                dense
-                outlined
-              >
-              </v-select>
-            </v-col>
-            <v-col class="d-flex" cols="12" sm="6" md="8">
-              <v-select
-                v-model="jugador.persona.lugar"
+                v-model="equipo.lugar"
                 required
                 :items="lugares"
                 item-text="nombre"
@@ -97,36 +63,25 @@
   </v-container>
 </template>
 <script>
-import { mask } from "vue-the-mask";
 import firebase from "firebase/app";
 import "firebase/storage";
 export default {
-  directives: {
-    mask
-  },
   data() {
     return {
       load: false,
-      mask: "########-#",
       imageData: null,
-      jugador: {
+      equipo: {
         id: this.$route.params.id,
-        foto: "",
-        posicion: "",
-        persona: {}
+        logo: "",
+        nombre: "",
+        lugar: {}
       },
-      lugares: [],
-      posiciones: [
-        { id: 1, nombre: "delantero" },
-        { id: 2, nombre: "centrocampista" },
-        { id: 3, nombre: "defensa" },
-        { id: 4, nombre: "portero" }
-      ]
+      lugares: []
     };
   },
   methods: {
     salir() {
-      this.$router.push("/jugador");
+      this.$router.push("/equipo");
     },
     async onSubmit() {
       this.load = true;
@@ -135,16 +90,16 @@ export default {
           var sec = new Date().getSeconds();
           const response = await firebase
             .storage()
-            .ref(`jugadores/${sec}${this.imageData.name}`)
+            .ref(`equipos/${sec}${this.imageData.name}`)
             .put(this.imageData);
           const url = await response.ref.getDownloadURL();
-          this.jugador.foto = await url.toString();
+          this.equipo.logo = await url.toString();
         }
       }
       await this.$axios
-        .post(this.$path + "/Jugador/Add", this.jugador)
+        .post(this.$path + "/equipo/Add", this.equipo)
         .catch(e => console.log(e));
-      this.$router.push("/jugador");
+      this.$router.push("/equipo");
     },
     getLugar() {
       this.$axios
@@ -153,18 +108,9 @@ export default {
           this.lugares = response.data;
         })
         .catch(e => console.log(e));
-    },
-    async llenar() {
-      await this.$axios
-        .get(this.$path + `/Jugador/FindBy/${this.$route.params.id}`)
-        .then(response => {
-          this.jugador = response.data;
-        })
-        .catch(e => console.log(e));
     }
   },
   mounted() {
-    this.llenar();
     this.getLugar();
   }
 };

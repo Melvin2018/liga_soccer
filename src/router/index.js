@@ -84,6 +84,18 @@ const routes = [{
         name: 'agregarj',
         component: () =>
             import ('../components/AgregarJ.vue')
+    }, ,
+    {
+        path: '/equipo/editar/:id',
+        name: 'editare',
+        component: () =>
+            import ('../components/EditarE.vue')
+    },
+    {
+        path: '/equipo/agregar',
+        name: 'agregare',
+        component: () =>
+            import ('../components/AgregarE.vue')
     },
     {
         path: '/temporada/estadisticas',

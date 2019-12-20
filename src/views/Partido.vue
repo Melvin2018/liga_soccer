@@ -464,7 +464,7 @@ export default {
         }
         var minu = "";
         if (extra == 0) {
-          minu = min.toString;
+          minu = min;
         } else {
           minu = min + "+" + extra;
         }
@@ -676,8 +676,8 @@ export default {
             this.tiempo += 1;
           }
         }
-      }, 598);
-      //  }, 59998);
+    //   }, 598);
+      }, 59998);
     },
     tiempov() {
       if (this.partido.descanso != 3) {
